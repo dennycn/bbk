@@ -1,0 +1,132 @@
+body {
+	background-color: #B1DBFF;
+}
+div.RoundedCorner{background: #FFFFFF;width:90%; padding-left:0px; padding-right:0px; margin-left:auto; margin-right:auto;}
+b.rtop, b.rbottom{display:block;background: #B1DBFF}
+b.rtop b, b.rbottom b{display:block;height: 1px;overflow: hidden; background: #FFFFFF}
+b.r1{margin: 0 5px}
+b.r2{margin: 0 3px}
+b.r3{margin: 0 2px}
+b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
+
+
+
+#search_box{
+width:100%;
+filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#FFC35B,endColorStr=#FFFFFF);
+background-color:#FFC35B;
+}
+
+.parent a:link {font-size:12px;text-decoration:none; color:#808080}
+.parent a:visited {font-size:12px;text-decoration:none color:#808080}
+.child a:link {font-size:12px;text-decoration:none; color:#808080}
+.child a:visited {font-size:12px;text-decoration:none; color:#808080}
+
+.graylinkfont a:link {font-size:11px;text-decoration:none; color:#808080}
+.graylinkfont a:visited {font-size:11px;text-decoration:none; color:#808080}
+
+.bluelink a:link {text-decoration:underline; color:#0033CC; font-size:12px}
+.bluelink a:visited {text-decoration:underline; color:#0033CC; font-size:12px}
+
+
+
+.newslinkfont a:link {font-size:12px;text-decoration:none; color:#0044DD; text-decoration:none}
+.newslinkfont a:visited {font-size:12px;text-decoration:none; color:#0044DD;text-decoration:none}
+.newslinkfont a:hover {font-size:12px;text-decoration:none; color:#0044DD;text-decoration:underline}
+
+.newsdate{font-size:12px;text-decoration:none; color:#0044DD;text-decoration:none}
+
+.articleFont{font-size:14px;text-decoration:none; color:#808080}
+.grayFont {font-size:12px;text-decoration:none; color:#808080}
+.redfont {font-size:16px;text-decoration:none; color:#CC0033}
+.darkFont{font-size:16px;text-decoration:none; color:#000000}
+
+
+.bluetitleFont{font-size:14px;text-decoration:none; color:#003399;font-weight:bold;}
+
+
+.blueklinkFont a:link{font-size:14px;text-decoration:underline; color:#0033cc;font-weight:bold;}
+.blueklinkFont a:hover {font-size:14px;text-decoration:underline; color:#0033cc;font-weight:bold;}
+.blueklinkFont a:active {font-size:14px;text-decoration:underline; color:#0033cc;font-weight:bold;}
+.blueklinkFont a:visited {font-size:14px;text-decoration:underline; color:#0033cc;font-weight:bold;}
+
+
+
+.blueklinka:link{font-size:12px;text-decoration:none; color:#003399;}
+
+.greenyFont a:link {font-size:12px;text-decoration:none; color:#50B10A}
+.greenyFont a:hover {font-size:12px;text-decoration:none; color:#006633}
+.greenyFont a:active {font-size:12px;text-decoration:none; color:#50B10A}
+.greenyFont a:visited {font-size:12px;text-decoration:none; color:#50B10A}
+
+
+.greenFont{font-size:16px;text-decoration:none; color:#009933; line-height:20px}
+.greenFontt {font-size:16px;text-decoration:none; color:#009933; line-height:20px}
+
+.redFont{font-size:12px;text-decoration:none; color:#009933; line-height:20px}
+
+.newslist{line-height:17px}
+
+.resultlist{line-height:22px}
+
+
+
+
+.inputButton {   /*°´Å¥*/
+	font-size:12px;
+	font-family:Arial, Sans-Serif;
+	font-weight:bold;
+	width:158px;	
+	height:22px;
+	color: #0959A4;
+	border:1px solid #74A8D9;
+	text-align:center;
+    filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#FFFFFF,endColorStr=#DCF0F4);
+	background-color:#DCF0F4;
+	padding-top:1px;
+	padding-left:1px;
+}
+ 
+.sureButton {   /*°´Å¥*/
+	font-size:12px;
+	font-family:Arial, Sans-Serif;
+	font-weight:bold;
+	width:88px;	
+	height:22px;
+	color: #0959A4;
+	border:1px solid #74A8D9;
+	text-align:center;
+	filter:progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#FFFFFF,endColorStr=#DCF0F4);
+	background-color:#DCF0F4;	
+	padding-top:1px;
+	padding-left:1px;
+}
+
+
+.search_td
+{
+	margin-left:10px;
+	margin-top:10px;
+	height:65px;
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#ECECEB,endColorStr=#FFFFFF);
+	background-color:#EAEAEA;
+
+}
+ 
+.searchbox {
+	font-family: Arial, sans-serif;
+	line-height:20px;
+	font-size:16px;
+	color: #000000;
+	width:280px;
+	height:20px;
+	background-color: #f8f7f2;
+	margin-bottom: 1px;
+	border: 1px solid #CCCCCC;	
+	border-top: 1px solid #CCCCCC;
+	border-left: 1px solid #CCCCCC;	
+}
+body {font-family:arial}
+.r{font-weight:normal;margin:0;display:inline;font-size:1em}
+.j{width:34em;line-height:120%}
+.g{margin:1em 0 1.2em}
