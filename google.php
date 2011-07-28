@@ -13,7 +13,7 @@ define("GOOGLEURL_POSTFIX", "");
 
 
 function search_google($query) {
-//    return NULL;
+  return NULL;
   if (strcasecmp(CHARSET, "UTF-8") != 0 &&
       strcasecmp(CHARSET, "UTF8") != 0) {
     $need_iconv = TRUE;

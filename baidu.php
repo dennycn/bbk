@@ -12,7 +12,7 @@ define("BAIDUURL_PREFIX", "http://www.baidu.com/s?wd=");
 define("BAIDUURL_POSTFIX", "&cl=3");
 
 function search_baidu($query) {
-    return NULL;
+  //return NULL;
   if (strcasecmp(CHARSET, "GB2312") != 0 &&
       strcasecmp(CHARSET, "GBK") != 0) {
     $need_iconv = TRUE;
@@ -45,11 +45,11 @@ function search_baidu($query) {
 //TODO: error here
 function parse_baidu($page) {
   $results = array();
-
+/* // fetch finance--news
   // fetch finance onebox
-  preg_match("/<ol><p style=\".*?\">" .
-             ".*?<\/p><\/ol>/si", $page, $out);
+  //preg_match("/<ol><p style=\".*?\">".".*?<\/p><\/ol>/si", $page, $out);
   $finance = $out[0];
+  ///print $page;
   // stock image
   $finance = str_replace("<ol>", "<ol style=\"padding-left:16px;\"", $finance);
   $finance = str_replace("/baidu?", "http://www.baidu.com/baidu?", $finance);
@@ -62,6 +62,7 @@ function parse_baidu($page) {
              "(.*?<\/font><br>)<\/font><\/td><\/tr><\/table>/si",
              $page, $out);
   $newshtml = $out[1];
+  
   preg_match_all("/<font size=-1>&nbsp;&nbsp;<a href=\"http:\/\/news.baidu.com\/ns\[0\]_(.*?)&web=5&query=.*?>" .
                  "(.*?)<\/a>[ ]*<font color=#666666>(.*?) (.*?)<\/font><\/font><br>/si",
                  $newshtml, $out, PREG_SET_ORDER);
@@ -72,6 +73,7 @@ function parse_baidu($page) {
     $news[] = array("url" => $outitem[1], "title" => $title,
                     "source" => $outitem[3], "time" => $outitem[4]);
   }
+*/
 
   // split every result
   preg_match_all("/<tr><td class=f>.*?<\/font><\/td><\/tr><\/table><br>/si",
@@ -81,22 +83,32 @@ function parse_baidu($page) {
   // get title, url and snippet
   $results["news"] = $news;
   foreach ($passes as $pass) {
-    preg_match("/<a .*?href=\"(.*?)\".*?><font size=\"3\">" . // url
+    ///print $pass;
+    //TODO: error here, add by denny
+/*
+    preg_match("/<a.*?href=\"(.*?)\".*?><font size=\"3\">" . // url
                "(.*?)<\/font><\/a><br>" . //title
                "<font size=-1>(.*?)<br>" . // snippet
                "<font [^>]*color=#008000>([^\s]*)/si", // dispurl
                $pass, $out);
+*/
+    preg_match("/<a.*?href=\"(.*?)\"" . // url
+               "(.*?)<\/a><\/h3>" . //title
+               "<font size=-1>(.*?)<br>" . // snippet
+               "([^\s]*)/si", // dispurl
+               $pass, $out);
+   
     $url = $out[1];
     $title = $out[2];
     $snippet = $out[3];
-    $dispurl = $out[4];
-    print $out[1];
+    //$dispurl = $out[4];
+    print $url;
     // handle the situation "tui guang"
     $pos = strpos($url, "http://www.baidu.com/baidu.php?url=");
     if ($pos !== false && $pos == 0) {
       $url = "http://" . $dispurl;
     }
-    print $url;
+    
     // normallize snippet and title color
     $snippet = str_replace("<font color=#C60A00>", "<font color=#CC0033>", $snippet);
     $title = str_replace("<font color=#C60A00>", "<font color=#CC0033>", $title);
@@ -104,7 +116,7 @@ function parse_baidu($page) {
     $results[] = array("url" => $url, "title" => $title, "snippet" => $snippet,
                        "dispurl" => $dispurl);
   }
-  ///print_r $results[0];
+
   return $results;
 }
 
