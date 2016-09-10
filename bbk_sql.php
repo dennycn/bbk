@@ -1,10 +1,14 @@
 <?php
-// bytemind@gmail.com
+/*
+@file: util.php
+@author: wuqifu@gmail.com
+@date: 2011-07-24
+@see:
+*/
 
+require_once('common/common_db.class.php');
+require_once('common/download.php');
 
-////////////////////////////////////////////////////////////
-//downloading a url
-require_once('database/common_db.class.php');
 
 function cached_download($url)
 {   // table: pageCache~ delete/select/update
@@ -22,8 +26,16 @@ function cached_download($url)
         $page=$result[0]->page;
         return $page;
     }
-    ///print 'sum='.$sum;
+    // really download
+    if (is_server_busy()) {
+        return NULL;
+    }
     $newpage=download($url);
+    if ($newpage == NULL) {
+        set_server_busy();
+        return NULL;
+    }
+
     // record in cache
     if($newpage!=NULL && $newpage!="" && strlen($url)<250)
     {
@@ -47,38 +59,6 @@ function cached_download($url)
         }
     }
     return $newpage;
-}
-
-function download($url) {
-    if (is_server_busy()) {
-        return NULL;
-    }
-    print $url;
-    $header[] = "Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*";
-    $header[] = "Accept-Language: zh-cn";
-    $header[] = "UA-CPU: x86";
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-    curl_setopt($ch, CURLOPT_USERAGENT,
-                'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)');
-    curl_setopt($ch, CURLOPT_TIMEOUT, 4);
-# if your php.curl does not support gzip, remove the following line.
-    curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
-    $content = curl_exec($ch);
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    if (substr($status, 0, 1)=="5") {
-        set_server_busy();
-    }
-    if ($status != 200) {
-        return NULL;
-    }
-    else {
-        return $content;
-    }
 }
 
 function is_server_busy() {

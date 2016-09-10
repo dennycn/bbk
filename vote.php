@@ -1,9 +1,9 @@
 <?php
 // bytemind@gmail.com
 
-@require_once('header.php');
-require_once('database/common_db.class.php');
-require_once('util.php');
+require_once('common/common_db.class.php');
+require_once('header.php');
+require_once('bbk_sql.php');
 if(isset($_SERVER['REMOTE_ADDR']))
 {
     $ip=$_SERVER['REMOTE_ADDR'];

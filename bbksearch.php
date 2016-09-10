@@ -1,10 +1,10 @@
 <?php
 // 实际的搜索实现文件
 //header("Content-Type: text/html; charset=UTF-8");
-require_once("search/baidu.php");
+//require_once("search/baidu.php");
 //require_once("sogou.php");
-require_once("search/google.php");
-require_once("util.php");
+//require_once("search/google.php");
+require_once("bbk_sql.php");
 require_once('header.php');
 
 $query="";

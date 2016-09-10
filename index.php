@@ -1,7 +1,7 @@
 <?php
 //header("Content-Type: text/html; charset=UTF-8");
-@require_once('header.php');
-@require_once("util.php");
+require_once('header.php');
+require_once("bbk_sql.php");
 
 //
 $uid = GetUid();
@@ -24,7 +24,7 @@ $uid = GetUid();
 </td></tr>
 
 <tr>
-<td height="35"><form name="form1" method="get" action="bbksearch.php">
+<td height="35"><form name="form1" method="get" action="bbksearch.php" onsubmit="return CheckForm();">
 <table id="search_box" width="98%" border="0" align="center">
 <tr>
 <td width="58%" height="35" align="right" valign="middle" style="padding-left:5px;">
@@ -158,16 +158,7 @@ if ($maxlen>200) {
 </table></td>
 </tr>
 <?php endif ?>
-<tr><td align=center>
-<br><br>
-<font size=-1>欢迎来自 <?php print $_SERVER['REMOTE_ADDR'];
-?> 的朋友</font>
-</td></tr>
-</table>
-<br>
-<br>
-<b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
-</div>
-<p align=center><font size=-1>本系统使用 <a href="http://azaaza.cublog.cn">搜索比比看</a> 源代码构建</font><p>
-</body>
-</html>
+
+<?php
+@require_once('foot.php');
+?>

@@ -8,15 +8,7 @@ define("GOOGLEURL_POSTFIX", "");
 define("BAIDUURL_PREFIX", "http://www.baidu.com/s?wd=");
 define("BAIDUURL_POSTFIX", "&cl=2");   // cl: 2/3~news
 
-/**
-@beief:
-@author: denny testdenny@163.com
-@date: 2016/9/11
-@tools:
-    download_page: file/file_get_content/curl/fsockopen/fopen/snoopy
-    parse_page: regex/simple_html_dom/DOMDocument
-@note:
-**/
+
 class SearchEngine
 {
     protected $query = '';
@@ -37,7 +29,6 @@ class SearchEngine
     {
     }
 
-    // php解析页面暂只发现regex，jquery无法调用
     function parse_page($page)
     {
     }
