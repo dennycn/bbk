@@ -1,5 +1,10 @@
+// bytemind@gmail.com
+modified: 2016/9/10
+
+注意事项：
 1. 数据库建立文件在sql/bbk.sql，你可以看一下它的内容。如果使用的是空间，则在phpmyadmin等页面中讲该文件建表部分导入即可。
 2. bbk的配置文件在database/config.php，也可以先看一下。你可能需要修改成你的设置。
+
 
 配置mysql数据库
   (如果你使用的是带mysql的空间，请按照你的空间的mysql设置方法设置，下面讲的是服务器的设置方法。)

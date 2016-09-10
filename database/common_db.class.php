@@ -2,6 +2,10 @@
 require_once ('Log.php');
 require_once ('config.php');
 
+/*
+@class: CommonDB
+called: mysqli
+*/
 class CommonDB{
 	private $conn = NULL;
 	private $dbHostName = NULL;
@@ -11,8 +15,8 @@ class CommonDB{
 	private $dbType = NULL;
 	static public $logger = NULL;
 	static public $className = 'CommonDB';
-	
-	function __construct($hostName = NULL,$username=NULL,$password=NULL,$dbname=NULL)
+
+	function __construct($hostName = NULL, $username=NULL, $password=NULL, $dbname=NULL)
 	{
 		//init db connection
 		$this->dbHostName = $hostName;
@@ -30,44 +34,42 @@ class CommonDB{
 		{
 			$name = $name."Internal";
 			//echo $name;
-			if(method_exists(self::$className,$name))
+			if(method_exists(self::$className, $name))
 			{
 				//echo 'exist';
-				return call_user_func_array(array(self::$className,$name), $args);
+				return call_user_func_array(array(self::$className, $name), $args);
 			}
 		}
 		else
 		{
 			$name = $name."DB";
 			//echo $name;
-			if(method_exists(self::$className,$name))
+			if(method_exists(self::$className, $name))
 			{
 				//echo 'exist';
-				return call_user_func_array(array(self::$className,$name), $args);
+				return call_user_func_array(array(self::$className, $name), $args);
 			}
 		}
 	}
-	
-	
-	
+
 	static function logAndDie($info)
 	{
 		self::log($info);
 		die();
 	}
-	
+
 	static function log($info)
 	{
 	}
-	
+
 	static function processConnectErrors()
 	{
 		//echo ('error');
 		$info = "MySQL error ".mysqli_connect_errno().": ".mysqli_connect_error();
 		self::log($info);
-		
+
 	}
-	
+
 	static function processErrors($errorSource)
 	{
 		//echo ('error');
@@ -75,7 +77,7 @@ class CommonDB{
 		self::log($info);
 		//...
 	}
-	
+
 	function setDatabaseType($type)
 	{
 		$this->dbType = $type;
@@ -101,12 +103,12 @@ class CommonDB{
 	{
 		$this->dbHostName = $host;
 	}
-	
+
 	function setConn($conn)
 	{
 		$this->conn = $conn;
 	}
-	
+
 	function getDatabaseType()
 	{
 		return $this->dbType;
@@ -148,13 +150,13 @@ class CommonDB{
 		self::setDatabaseName('bbk');
 		$this->conn = self::getConnection();
 	}
-	
+
 	function connect()
 	{
-		return $this->getConnection($this->dbHostName,$this->userName,$this->userPassword,$this->dbName);
+		return $this->getConnection($this->dbHostName, $this->userName, $this->userPassword, $this->dbName);
 	}
-	
-	static function getConnection($dbHostName = NULL,$userName =NULL,$userPassword = NULL,$dbName =NULL)
+
+	static function getConnection($dbHostName = NULL, $userName =NULL, $userPassword = NULL, $dbName =NULL)
 	{
 		//get config db info
 		if(is_null($dbHostName)&&is_null($userName)&&is_null($userPassword)&&is_null($dbName))
@@ -165,100 +167,96 @@ class CommonDB{
 				$userPassword =PASSWD;
 				$dbName = DATABASE;
 		}
-		$conn = new mysqli($dbHostName,$userName,$userPassword,$dbName);
-		//$conn = mysqli_init();
-		//$conn->real_connect($dbHostName,$userName,$userPassword,$dbName);
-                if (mysqli_connect_errno())
-		{
-			self::processConnectErrors();
-			return NULL;
-		}
-		//$utf8 = "set names utf8" ;
-		//$utf8 = "show variables";
+		$conn = new mysqli($dbHostName, $userName, $userPassword, $dbName);
+        /* check connection */
+        if ($conn->connect_errno) {  // the same to mysqli_connect_errno()
+            printf("Connect failed: %s\n", $conn->connect_error);
+            self::processConnectErrors();
+            return NULL;
+        }
+
 		$CHARSET="set names ".CHARSETCODE;
-		//print $CHARSET;
 		$result = $conn->query($CHARSET);
-                if(!$result)
-                {
-                  echo ("error");
-                  self::processErrors($conn);
-                  return NULL;
+        if(!$result)
+        {
+            printf("query failed: %s\n", $conn->connect_error);
+            self::processErrors($conn);
+            return NULL;
 		}
 		return $conn;
 	}
-	
+
 	function queryInternal($sql)
 	{
-		return self::queryDB($sql,$this->conn);
+		return self::queryDB($sql, $this->conn);
 	}
-	
+
 	static function queryDB($sql,&$conn)
 	{
-		
+
 		$result = NULL;
 		if(is_null($sql))return NULL;
-		
+
 		$result = $conn->query($sql);
-			
+
 		if(!$result)
 		{
 			self::processErrors($conn);
 			return NULL;
 		}
-		
+
 		return $result;
 	}
-	
+
 	function selectInternal($sql)
 	{
-		return self::selectDB($sql,$this->conn);
+		return self::selectDB($sql, $this->conn);
 	}
-	
+
 	static function selectDB($sql,&$conn)
 	{
-		
-		return self::queryDB($sql,$conn);
+
+		return self::queryDB($sql, $conn);
 	}
-	
+
 	function selectRowInternal($sql)
 	{
-		return self::selectRowDB($sql,$this->conn);
+		return self::selectRowDB($sql, $this->conn);
 	}
-	
+
 	static function selectRowDB($sql,&$conn)
 	{
-		
 		$result = NULL;
 		if(is_null($sql))return NULL;
-		
+
 		$result = $conn->query($sql);
 		if(!$result)
 		{
 			self::processErrors($conn);
 			return NULL;
 		}
-		
+
 		$row = $result->fetch_assoc();
-		
-		
+
+
 		self::freeResult($result);
-		
-		
-		
+
+
+
 		return $row;
 	}
-	
+
 	function selectRowsInternal($sql)
 	{
-		return self::selectRowsDB($sql,$this->conn);
+		return self::selectRowsDB($sql, $this->conn);
 	}
-	
+
 	static function selectRowsDB($sql,&$conn)
 	{
-		
+
 		$results = NULL;
 		if(is_null($sql))return NULL;
-		
+
 		$results = $conn->query($sql);
 		if(!$results)
 		{
@@ -266,49 +264,25 @@ class CommonDB{
 			return NULL;
 		}
 		$rows = self::getResults($results);
-		
+
 		self::freeResult($results);
-		
-		
+
+
 		return $rows;
-	}
-	
-	function selectLimitRowsInternal($sql,$begin=0,$count=20)
-	{
-		
-		return self::selectLimitRowsDB($sql,$begin,$count,$this->conn);
 	}
 
-	/*
-	static function selectLimitRowsDB($sql,$begin=0,$count=20,&$conn)
+	function selectLimitRowsInternal($sql, $begin=0, $count=20)
 	{
-		//echo 'limit';
-		$results = NULL;
-		if(is_null($sql))return NULL;
-		
-		$results = $conn->query($sql);
-		//echo $sql;
-		if(!$results)
-		{
-			self::processErrors($conn);
-			return NULL;
-		}
-		$rows = self::getLimitResults($results,$begin,$count);
-		
-		self::freeResult($results);
-		
-		
-		return $rows;
+
+		return self::selectLimitRowsDB($sql, $begin, $count, $this->conn);
 	}
-	*/
-	static function selectLimitRowsDB($sql,$begin=0,$count=20,&$conn)
+
+	static function selectLimitRowsDB($sql, $begin=0, $count=20,&$conn)
 	{
-		//echo 'limit';
 		$results = NULL;
 		if(is_null($sql))return NULL;
 		$limitSql = " limit ".$begin.",".$count." ";
 		$sql = $sql.$limitSql;
-		//echo $sql;
 		$results = $conn->query($sql);
 		//echo $sql;
 		if(!$results)
@@ -317,23 +291,21 @@ class CommonDB{
 			return NULL;
 		}
 		$rows = self::getResults($results);
-		
+
 		self::freeResult($results);
-		
-		
 		return $rows;
 	}
-	
+
 	function insertInternal($sql)
 	{
-		return self::insertDB($sql,$this->conn);
+		return self::insertDB($sql, $this->conn);
 	}
-	
+
 	static function insertDB($sql,&$conn)
 	{
 		$id = NULL;
 		if(is_null($sql))return NULL;
-		
+
 		$result = $conn->query($sql);
 		if(!$result)
 		{
@@ -343,12 +315,12 @@ class CommonDB{
 		$id = $conn->insert_id;
 		return $id;
 	}
-	
+
 	function updateInternal($sql)
 	{
-			return self::updateDB($sql,$this->conn);
+			return self::updateDB($sql, $this->conn);
 	}
-	
+
 	static function updateDB($sql,&$conn)
 	{
 			CommonDB::log($sql);
@@ -362,27 +334,25 @@ class CommonDB{
 			}
 			$count = $conn->affected_rows;
 			return $count;
-			
-		
 	}
-	
+
 	function deleteInternal($sql)
 	{
-		return self::deleteDB($sql,$this->conn);
+		return self::deleteDB($sql, $this->conn);
 	}
-	
+
 	static function deleteDB($sql,&$conn)
 	{
-		return self::updateDB($sql,$conn);
+		return self::updateDB($sql, $conn);
 	}
-	
+
 	static function convertBlob($blob)
 	{
 		if(is_null($blob))return NULL;
-		return addslashes($blob); 
+		return addslashes($blob);
 	}
-	
-	static function convert($value,$type)
+
+	static function convert($value, $type)
 	{
 		//echo "value=".$value."|";
 		if(is_null($value)&&($type!='now')) return 'NULL';
@@ -395,79 +365,61 @@ class CommonDB{
 			case 'float':
 			case 'double':
 						$defaultFlag = false;
-						
+
 						break;
-			case 'String': 
+			case 'String':
 						$value ="'".$value."'";
 						$defaultFlag = false;
 						break;
-			case 'date': 
-			case 'time': 
+			case 'date':
+			case 'time':
 					$value ="'".$value."'";
 					$defaultFlag = false;
 					break;
-			case 'now'://insert current time
+			case 'now': //insert current time
 					$value ="now()";
 					$defaultFlag = false;
 					break;
 		}
 		if($defaultFlag)$value ="'".$value."'";
-		
-		return $value; 
+
+		return $value;
 	}
-	
-	/*
-	static function reconvert($field,$type)
-	{
-		if(is_null($field)) return 'NULL';
-		switch($type)
-		{
-			case 'date':
-					$field =strftime('%Y-%m-%d',$field);
-					break; 
-			case 'time': 
-			case 'now' :
-					$field =strftime('%Y-%m-%d %X',$field);
-					break;
-		}
-		return $field; 
-	}
-	*/
-	
-	static function reconvert($field,$type)
+
+	static function reconvert($field, $type)
 	{
 		if(is_null($field)) return 'NULL';
 		switch($type)
 		{
 			case 'date':
 					$field ="DATE_FORMAT('$field','%Y-%m-%d') as $field";
-					break; 
-			case 'time': 
+					break;
+			case 'time':
 			case 'now' :
 					$field =$field;
 					break;
 		}
-		return $field; 
+		return $field;
 	}
-	
+
 	static function getDate($sourceTime)
 	{
 		if(is_null($sourceTime)) return 'NULL';
-		
+
 		//echo $sourceTime;
-		$dateDatas = preg_split("/ /",$sourceTime);
+		$dateDatas = preg_split("/ /", $sourceTime);
 		//print_r($dateDatas);
 		if(isset($dateDatas[0]))
-				return $dateDatas[0]; 
+				return $dateDatas[0];
 		else
 				return $sourceTime;
 	}
-	
+
 	function createClassName($classFileName)
 	{
-				
-			$classNameParts = split("_",$classFileName); 
-			$length = count($classNameParts); 
+
+			$classNameParts = split("_", $classFileName);
+			$length = count($classNameParts);
 			$className = NULL;
 			for($i=0;$i<$length;$i++)
 			{
@@ -476,15 +428,15 @@ class CommonDB{
 			}
 			return $className;
 	}
-	
-	
+
+
 	static function getResult(&$result)
 	{
 		if(is_null($result))return NULL;
 		$row = $result->fetch_assoc();
 		return $row;
 	}
-	
+
 	static function getResults(&$result)
 	{
 		if(is_null($result))return NULL;
@@ -497,8 +449,8 @@ class CommonDB{
 		}
 		return $rows;
 	}
-	
-	static function getLimitResults(&$result,$begin=0,$count=20)
+
+	static function getLimitResults(&$result, $begin=0, $count=20)
 	{
 		if(is_null($result))return NULL;
 		$rows = NULL;
@@ -513,13 +465,13 @@ class CommonDB{
 		}
 		return $rows;
 	}
-	
+
 	static function freeResult(&$result)
 	{
 	  if(is_null($result))return false;
 		else
 		{
-			 $result->free(); 
+			 $result->free();
 			 return true;
 		}
 	}
@@ -527,37 +479,35 @@ class CommonDB{
 	{
           return $this->conn->real_escape_string($string);
 	}
-	
 
-	
 	static function close(&$conn)
 	{
 		if(!is_null($conn))
 				$conn->close();
 	}
-	
+
 	function closeConn()
 	{
 		if(!is_null($this->conn) )
 				$this->conn->close();
 	}
-	
+
 	function begin()
 	{
 		 $flag = $this->conn->autocommit(false);
 		 return $flag;
 	}
-	
+
 	function commit()
 	{
 		 $this->conn->commit();
 	}
-	
+
 	function rollback()
 	{
 		$this->conn->rollback();
 	}
-	
+
 	function __destruct()
 	{
 		$this->closeConn();

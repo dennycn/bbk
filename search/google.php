@@ -1,19 +1,20 @@
 <?php
 /*
-@author:  bytemind@gmail.com 
-@modifier: wuqifu@gmail.com 
+@author:  bytemind@gmail.com
+@modifier: wuqifu@gmail.com
 @date: 2011-07-24
 @see: http://code.google.com/intl/zh-cn/apis/customsearch/v1/using_rest.html
+@query: http://www.goole.com/search?h/=zh-CH&amp;q=
 */
+
 require_once('util.php');
-//define("GOOGLEURL_PREFIX", "http://www.google.com.hk/search?complete=1&hl=zh-CN&q=");
-//define("GOOGLEURL_POSTFIX", "&btnG=Google+%E6%90%9C%E7%B4%A2&meta=");
 define("GOOGLEURL_PREFIX", "http://www.google.com.hk/#hl=zh-CN&source=hp&q=");
 define("GOOGLEURL_POSTFIX", "");
 
 
 function search_google($query) {
   return NULL;
+
   if (strcasecmp(CHARSET, "UTF-8") != 0 &&
       strcasecmp(CHARSET, "UTF8") != 0) {
     $need_iconv = TRUE;
@@ -78,7 +79,7 @@ function parse_google($page) {
   $finance = str_replace("<td width=20>", "<td width=1px>", $finance);
   $finance = str_replace("padding:3px 0", "padding:0px 0", $finance);
   $finance = str_replace("margin-top:0.3em", "margin-top:0px", $finance);
-  $finance = str_replace("</a><table style=\"display:inline;padding-bottom:0\"", 
+  $finance = str_replace("</a><table style=\"display:inline;padding-bottom:0\"",
   "</a><br><table style=\"display:inline;padding-bottom:0\"", $finance);
 
   $results["finance"] = $finance;

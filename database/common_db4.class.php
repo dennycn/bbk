@@ -2,6 +2,10 @@
 require_once ('Log.php');
 require_once ('config.php');
 
+/*
+@class: CommonDB
+called: mysql_connect
+*/
 class CommonDB{
 	var $username;
 	var $password;
@@ -11,7 +15,7 @@ class CommonDB{
 	var $result;
 
 	function CommonDB()
-	{	
+	{
   		if(is_null($this->hostname)&&is_null($this->username)&&is_null($password)&&is_null($database))
 		{
 			$this->hostname= HOST;
@@ -22,16 +26,16 @@ class CommonDB{
  	    $this->connectdb();
      	$this->selectdb();
    }
-   
 
-   
-	function connectdb(){ //Õâ¸öº¯ÊýÓÃÓÚÁ¬½ÓÊý¾Ý¿â
-	
+
+
+	function connectdb(){ //è¿™ä¸ªå‡½æ•°ç”¨äºŽè¿žæŽ¥æ•°æ®åº“
+
 	$this->link=mysql_connect($this->hostname,$this->username,$this->password) or die("Sorry,can not connect to database");
 	return $this->link;
 	}
-	
-	function selectdb(){ //Õâ¸öº¯ÊýÓÃÓÚÑ¡ÔñÊý¾Ý¿â
+
+	function selectdb(){ //è¿™ä¸ªå‡½æ•°ç”¨äºŽé€‰æ‹©æ•°æ®åº“
 	mysql_select_db($this->database,$this->link);
 	}
 
@@ -41,8 +45,8 @@ class CommonDB{
 	//	print $string;
         return mysql_real_escape_string($string,$this->link);
 	}
-	
-	function query($sql){ //Õâ¸öº¯ÊýÓÃÓÚËÍ³ö²éÑ¯Óï¾ä²¢·µ»Ø½á¹û£¬³£ÓÃ¡£
+
+	function query($sql){ //è¿™ä¸ªå‡½æ•°ç”¨äºŽé€å‡ºæŸ¥è¯¢è¯­å¥å¹¶è¿”å›žç»“æžœï¼Œå¸¸ç”¨ã€‚
 		if($this->result=mysql_query($sql,$this->link)) return $this->result;
 		else {
 		echo "SQL_ERROR: ".mysql_error();
@@ -52,11 +56,11 @@ class CommonDB{
 
 	function selectRowsDB($sql)
 	{
-		
+
 		$results = NULL;
-		
+
 		if(is_null($sql))return NULL;
-			
+
 		$results = $this->query($sql);
 		if(!$results)
 		{
@@ -65,14 +69,14 @@ class CommonDB{
 		$rows =$this->getResults($results);
 		return $rows;
 	}
-	
-	
+
+
 	function selectRows($sql)
 	{
 		return  $this->selectRowsDB($sql);
 	}
-	
-	
+
+
 	function getResults(&$result)
 	{
 		if(is_null($result))return NULL;
@@ -85,13 +89,13 @@ class CommonDB{
 		}
 		return $rows;
 	}
-	
+
 	function freeResult(&$result)
 	{
 	  if(is_null($result))return false;
 		else
 		{
-			 $result->free(); 
+			 $result->free();
 			 return true;
 		}
 	}
@@ -99,12 +103,12 @@ class CommonDB{
 	{
 		return $this->deleteDB($sql,$this->link);
 	}
-	
+
 	function deleteDB($sql,&$conn)
 	{
 		return $this->updateDB($sql,$this->link);
 	}
-	
+
 	 function updateDB($sql)
 	{
 			$count = NULL;
@@ -116,20 +120,20 @@ class CommonDB{
 			}
 			$count = $this->link->affected_rows;
 			return $count;
-			
-		
+
+
 	}
-	
+
 	function insertInternal($sql)
 	{
 		return $this->insertDB($sql,$this->link);
 	}
-	
+
 	function insertDB($sql)
 	{
 		$id = NULL;
 		if(is_null($sql))return NULL;
-		
+
 		$result = $this->query($sql,$this->link);
 		if(!$result)
 		{
@@ -143,17 +147,17 @@ class CommonDB{
 	{
 		return 1;
 	}
-		
-	
+
+
 	function commit()
 	{
-		
+
 	}
-	
+
 	function rollback()
 	{
 
 	}
-	
+
 }
 ?>

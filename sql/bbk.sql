@@ -1,5 +1,5 @@
 ﻿
-DROP DATABASE bbk;
+# DROP DATABASE IF EXISTS bbk;
 CREATE DATABASE bbk;
 USE bbk;
 

@@ -1,18 +1,20 @@
 <?php
 // bytemind@gmail.com
 /*
-@author:  bytemind@gmail.com 
-@modifier: wuqifu@gmail.com 
+@author:  bytemind@gmail.com
+@modifier: wuqifu@gmail.com
 @date: 2011-07-24
-@see: 
+@see:
+@query: http://www.baidu.com/s?wd=
 */
+
 require_once('util.php');
 
 define("BAIDUURL_PREFIX", "http://www.baidu.com/s?wd=");
 define("BAIDUURL_POSTFIX", "&cl=3");
 
 function search_baidu($query) {
-  //return NULL;
+  return NULL;
   if (strcasecmp(CHARSET, "GB2312") != 0 &&
       strcasecmp(CHARSET, "GBK") != 0) {
     $need_iconv = TRUE;
@@ -37,7 +39,7 @@ function search_baidu($query) {
   if ($need_iconv) {
     $page = iconv('GBK', CHARSET . "//IGNORE", $page);
   }
-  ///print $page;
+  //print $page;
   return parse_baidu($page);
 }
 
@@ -54,7 +56,7 @@ function parse_baidu($page) {
   $finance = str_replace("<ol>", "<ol style=\"padding-left:16px;\"", $finance);
   $finance = str_replace("/baidu?", "http://www.baidu.com/baidu?", $finance);
   $results["finance"] = $finance;
-  
+
   // fetch news one box
   preg_match("/<a href=\"http:\/\/news.baidu.com\/ns\?" .
              ".*?>.*?<\/a>.*?<a href=\"http:\/\/news.baidu.com\/" .
@@ -62,7 +64,7 @@ function parse_baidu($page) {
              "(.*?<\/font><br>)<\/font><\/td><\/tr><\/table>/si",
              $page, $out);
   $newshtml = $out[1];
-  
+
   preg_match_all("/<font size=-1>&nbsp;&nbsp;<a href=\"http:\/\/news.baidu.com\/ns\[0\]_(.*?)&web=5&query=.*?>" .
                  "(.*?)<\/a>[ ]*<font color=#666666>(.*?) (.*?)<\/font><\/font><br>/si",
                  $newshtml, $out, PREG_SET_ORDER);
@@ -97,7 +99,7 @@ function parse_baidu($page) {
                "<font size=-1>(.*?)<br>" . // snippet
                "([^\s]*)/si", // dispurl
                $pass, $out);
-   
+
     $url = $out[1];
     $title = $out[2];
     $snippet = $out[3];
@@ -108,7 +110,7 @@ function parse_baidu($page) {
     if ($pos !== false && $pos == 0) {
       $url = "http://" . $dispurl;
     }
-    
+
     // normallize snippet and title color
     $snippet = str_replace("<font color=#C60A00>", "<font color=#CC0033>", $snippet);
     $title = str_replace("<font color=#C60A00>", "<font color=#CC0033>", $title);
