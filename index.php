@@ -29,7 +29,7 @@ $uid = GetUid();
 <tr>
 <td width="58%" height="35" align="right" valign="middle" style="padding-left:5px;">
 <img src="images/search_icon.gif" width="24" height="25" align="absmiddle" />&nbsp;
-<input type="text" name="query" class="searchbox"></td>
+<input id='query' type="text" name="query" class="searchbox"></td>
 <td width="42%" align="left" valign="middle" style="padding-left:5px;">
 <input type="submit" value="比比看" class="sureButton"/>
 </td>

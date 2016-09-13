@@ -8,7 +8,9 @@
 '''
 
 import sys
+import re
 import urllib
+import urllib2
 from pyquery import PyQuery
 
 #from spidermodule.util.download  import download_with_decode, download_by_proxy
@@ -57,7 +59,7 @@ def download_with_decode(url):
     except urllib2.URLError, reason:
         raise urllib2.URLError(reason)
     except Exception,e:
-        logger.error('download_with_decode: %s,%s',e,url)
+        print('download_with_decode: %s,%s',e,url)
     finally:
         if response:
             response.close()
@@ -126,7 +128,6 @@ class BaiduSearchEngine(SearchEngine):
         ress = []
         dpage = PyQuery(page)
         datalist = dpage('.result')
-
         for item in datalist.items():
             ddpage = PyQuery(item.html())
             title = ddpage('h3.t').text()
@@ -149,29 +150,70 @@ class GoogleSearchEngine(SearchEngine):
     '''
     def build_url(self):
         url = GOOGLEURL_PREFIX
-        url += urllib.quote(self.query)
+        url += self.query
         url += GOOGLEURL_POSTFIX
         return url
 
-    def download_page(self, url):
-        pass
-
     def parse_page(self, page):
-        pass
+        if not page:
+            return None
 
 
 class SogouSearchEngine(SearchEngine):
     '''
     '''
-    pass
+    def build_url(self):
+        # https://www.sogou.com/web?query=mp3
+        url = 'https://www.sogou.com/web?query='
+        url += self.query
+        return url
+
+    def parse_page(self, page):
+        if not page:
+            return None
+
+        print("pagelen=%d" %len(page))
+        ress = []
+        dpage = PyQuery(page)
+        datalist = dpage('.result')
+        for item in datalist.items():
+            ddpage = PyQuery(item.html())
+            title = ddpage('h3.t').text()
+            abstract = ddpage('').text()
+            url = ddpage('div.f13 a.c-showurl').text()
+            res = SearchResult(title, abstract, url)
+            result_dict = {}
+            result_dict['url'] = url
+            result_dict['title'] = title
+            result_dict['snippet'] = abstract
+            result_dict['dispurl'] = url
+            ress.append(result_dict)
+
+            print('77 %s %s %s' %(title, abstract, url))
+        print('len(ress)=%d' %len(ress))
+        return ress
 
 
-#if __name__ == "__main__":
-argv_num = len(sys.argv)
-if argv_num == 2:
-    query = sys.argv[1]
-    se = BaiduSearchEngine()
-    res = se.search(query)
-    #res = se.search(u'mp4')
-    print(res)
-else: print None
+def main_with_args():
+    res = None
+    se = None
+    argv_num = len(sys.argv)
+    if argv_num == 3:
+        site = sys.argv[1]
+        query = sys.argv[2]
+        if site == 'baidu':
+            se = BaiduSearchEngine()
+        elif site == 'sogou':
+            se = BaiduSearchEngine()
+        elif site == 'google':
+            se = GoogleSearchEngine()
+
+        res = se.search(query)
+        print res
+    else:
+        print 'Usage: ' + sys.argv[0] + ' [site] [query] '
+
+
+if __name__ == "__main__":
+    #pass
+    main_with_args()

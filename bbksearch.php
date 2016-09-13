@@ -48,7 +48,7 @@ $pid = pending($uid, $showOrder, $query);
 返回比比看主页</a></span></td>
 </tr>
 <tr>
-<td height="35"><form name="form1" method="post" action="" onsubmit="return CheckForm();">
+<td height="35"><form name="form1" method="get" action="bbksearch.php" onsubmit="return CheckForm();">
 <table id="search_box" width="98%" border="0" align="center">
 <tr>
 <td width="50%" height="35" align="right" valign="middle" style="padding-left:5px;"><img src="images/search_icon.gif" width="24" height="25" align="absmiddle" />&nbsp;
@@ -139,11 +139,11 @@ function simulate_data()
 
 // 最终的网页检索选择函数
 function search($query, $engine) {
-    return simulate_data();
+    //return simulate_data();
 
     // called python
-    $program = "/usr/bin/python ./search/metasearch.py ".$query;
-    print($program);
+    $program = '/usr/bin/python ./search/metasearch.py '.$engine.' '.$query;
+    print($program.'<br>');
     return exec ($program);
 
     if ($engine == "google") {
