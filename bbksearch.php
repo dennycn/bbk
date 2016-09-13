@@ -48,7 +48,7 @@ $pid = pending($uid, $showOrder, $query);
 返回比比看主页</a></span></td>
 </tr>
 <tr>
-<td height="35"><form name="form1" method="post" action="bbksearch.php" onsubmit="return CheckForm();">
+<td height="35"><form name="form1" method="post" action="" onsubmit="return CheckForm();">
 <table id="search_box" width="98%" border="0" align="center">
 <tr>
 <td width="50%" height="35" align="right" valign="middle" style="padding-left:5px;"><img src="images/search_icon.gif" width="24" height="25" align="absmiddle" />&nbsp;
@@ -123,8 +123,29 @@ display($result_one, $query);
 </html>
 <?php
 
+function simulate_data()
+{
+    $results = array();
+    for ($i = 0; $i < 4; $i++){
+        $url = 'www.9ku.com';
+        $title = '9k';
+        $snippet = 'fffff 9k ddddd';
+        $dispurl = $url;
+        $results[] = array("url" => $url, "title" => $title, "snippet" => $snippet,
+                           "dispurl" => $dispurl);
+    }
+    return $results;
+}
+
 // 最终的网页检索选择函数
 function search($query, $engine) {
+    return simulate_data();
+
+    // called python
+    $program = "/usr/bin/python ./search/metasearch.py ".$query;
+    print($program);
+    return exec ($program);
+
     if ($engine == "google") {
         return search_google($query);
     }
@@ -147,44 +168,43 @@ function get_search_result($query, $engine) {
 
 function display($result, $query)
 {
-// 不同频道有不同的显示模板，现分为news/finance/
-$result_num=count($result);
-if ($result["news"]!=NULL) {
-$result_num--;
-}
-if($result_num>=10)
-{
-$result_num=10;  // display at most 10 results
-}
+    // 不同频道有不同的显示模板，现分为news/finance/
+    $result_num=count($result);
+    if ($result["news"]!=NULL) {
+        $result_num--;
+    }
+    if($result_num>=10)
+    {
+        $result_num=10;  // display at most 10 results
+    }
 
-if ($result["finance"])
-{
-print $result["finance"];
-}
+    if ($result["finance"])
+    {
+        print $result["finance"];
+    }
 
-$news_num=count($result["news"]);
-if($news_num>=4)
-{
-$news_num=4;  // display at most 10 results
-}
-if($news_num>0)
-print "<strong><span class='grayFont'>".htmlspecialchars($query)."的相关新闻  - 今日焦点新闻</span></strong><br />";
+    $news_num=count($result["news"]);
+    if($news_num>=4)
+    {   // display at most 4 results
+        $news_num=4;
+    }
+    if($news_num>0)
+        print "<strong><span class='grayFont'>".htmlspecialchars($query)."的相关新闻  - 今日焦点新闻</span></strong><br />";
 
+    for($k=0; $k<$news_num; $k++)
+    {
+        print "<div class='newslist'><span class='bluelink'>&nbsp;&nbsp;<a href=".$result["news"][$k]["url"].">".$result["news"][$k]["title"]."</a>&nbsp;&nbsp;</span><span class='grayFont'>". $result["news"][$k]["source"]."&nbsp;	".$result["news"][$k]["time"] ."</span><br /></div>";
+    }
 
-for($k=0; $k<$news_num; $k++)
-{
-print "<div class='newslist'><span class='bluelink'>&nbsp;&nbsp;<a href=".$result["news"][$k]["url"].">".$result["news"][$k]["title"]."</a>&nbsp;&nbsp;</span><span class='grayFont'>". $result["news"][$k]["source"]."&nbsp;	".$result["news"][$k]["time"] ."</span><br /></div>";
-}
-
-print "<br/>";
-for($i=0; $i<$result_num; $i++)
-{
-$title=$result[$i]["title"];
-print "<div class='resultlist'><a href='".$result[$i]["url"]."' target='_blank'>".$title."</a>";
-if ($result[$i]["snippet"] != "")
-print "<br/><span class='darkFont'>".$result[$i]["snippet"] . "</span>";
-print "<br/><span class='greenFont'>".$result[$i]["dispurl"] . "</span></div><br/>";
-}
+    print "<br/>";
+    for($i=0; $i<$result_num; $i++)
+    {
+        $title=$result[$i]["title"];
+        print "<div class='resultlist'><a href='".$result[$i]["url"]."' target='_blank'>".$title."</a>";
+        if ($result[$i]["snippet"] != "")
+        print "<br/><span class='darkFont'>".$result[$i]["snippet"] . "</span>";
+        print "<br/><span class='greenFont'>".$result[$i]["dispurl"] . "</span></div><br/>";
+    }
 
 }
 ?>
