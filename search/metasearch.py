@@ -9,11 +9,14 @@
 
 import sys
 import re
+import json
 import urllib
 import urllib2
 from pyquery import PyQuery
 
-#from spidermodule.util.download  import download_with_decode, download_by_proxy
+# download_with_decode
+#from spidermodule.util.download  import download_by_proxy
+#from spidermodule.util.logsetting import logger
 
 CHARSET = 'utf-8'
 
@@ -60,6 +63,7 @@ def download_with_decode(url):
         raise urllib2.URLError(reason)
     except Exception,e:
         print('download_with_decode: %s,%s',e,url)
+        #logger.info('download_with_decode: %s,%s',e,url)
     finally:
         if response:
             response.close()
@@ -84,19 +88,20 @@ class SearchEngine:
     '''
     _query = ''
     _url = ''
-    _res = {}
+    _res = []
     def __init__(self):
         pass
 
     def search(self, query):
-        res = None
+        res = []
+        #logger.info('search: %s', query)
         try:
-            self.query = query  #.decode(CHARSET, 'ignore')
+            self.query = query  #.decode('utf-8', 'ignore')
             self._url = self.build_url()
             print 46,self._url
             page = download_with_decode(self._url)
             #page = download_by_proxy(self._url, 'http://www.baidu.com/')
-
+            #page = page.decode('utf-8', 'ignore')
             res = self.parse_page(page)
         except Exception,e:   #
             print('search error: %s %s', e, query)
@@ -122,7 +127,7 @@ class BaiduSearchEngine(SearchEngine):
 
     def parse_page(self, page):
         if not page:
-            return None
+            return []
 
         print("pagelen=%d" %len(page))
         ress = []
@@ -135,10 +140,10 @@ class BaiduSearchEngine(SearchEngine):
             url = ddpage('div.f13 a.c-showurl').text()
             res = SearchResult(title, abstract, url)
             result_dict = {}
-            result_dict['url'] = url
-            result_dict['title'] = title
-            result_dict['snippet'] = abstract
-            result_dict['dispurl'] = url
+            result_dict["url"] = url  #  #.encode('utf-8', 'ignore')
+            result_dict["title"] = title  #  #.encode('utf-8', 'ignore')
+            result_dict["snippet"] = abstract  #  #.encode('utf-8', 'ignore')
+            result_dict["dispurl"] = url  #  #.encode('utf-8', 'ignore')
             ress.append(result_dict)
 
             print('77 %s %s %s' %(title, abstract, url))
@@ -156,8 +161,8 @@ class GoogleSearchEngine(SearchEngine):
 
     def parse_page(self, page):
         if not page:
-            return None
-
+            return []
+        return []
 
 class SogouSearchEngine(SearchEngine):
     '''
@@ -165,37 +170,41 @@ class SogouSearchEngine(SearchEngine):
     def build_url(self):
         # https://www.sogou.com/web?query=mp3
         url = 'https://www.sogou.com/web?query='
-        url += self.query
+        url += urlencode(self.query)
         return url
 
     def parse_page(self, page):
         if not page:
-            return None
+            return []
 
         print("pagelen=%d" %len(page))
-        ress = []
+        results = {}
+        res_list = []
         dpage = PyQuery(page)
-        datalist = dpage('.result')
+        datalist = dpage('.results div.rb')
         for item in datalist.items():
             ddpage = PyQuery(item.html())
-            title = ddpage('h3.t').text()
-            abstract = ddpage('').text()
-            url = ddpage('div.f13 a.c-showurl').text()
+            title = ddpage('h3.pt').text()
+            abstract = ddpage('div.ft').text()
+            url = ddpage('h3.pt a').attr('href')
+            dis_url = ddpage('div.fb cite').text()
             res = SearchResult(title, abstract, url)
             result_dict = {}
-            result_dict['url'] = url
-            result_dict['title'] = title
-            result_dict['snippet'] = abstract
-            result_dict['dispurl'] = url
-            ress.append(result_dict)
+            result_dict["url"] = url
+            result_dict["title"] = title  #.encode('utf-8', 'ignore')
+            result_dict["snippet"] = abstract  #.encode('utf-8', 'ignore')
+            result_dict["dispurl"] = dis_url
+            res_list.append(result_dict)
 
-            print('77 %s %s %s' %(title, abstract, url))
-        print('len(ress)=%d' %len(ress))
-        return ress
+            #print('77 %s %s %s' %(title, abstract, url))
+        results['data'] = res_list
+        print('len(ress)=%d' %len(res_list))
+        #return results
+        return json.dumps(results)
 
 
 def main_with_args():
-    res = None
+    results = []
     se = None
     argv_num = len(sys.argv)
     if argv_num == 3:
@@ -204,16 +213,17 @@ def main_with_args():
         if site == 'baidu':
             se = BaiduSearchEngine()
         elif site == 'sogou':
-            se = BaiduSearchEngine()
+            se = SogouSearchEngine()
         elif site == 'google':
             se = GoogleSearchEngine()
 
-        res = se.search(query)
-        print res
+        results = se.search(query)
+        print results
+        return str(results)
     else:
-        print 'Usage: ' + sys.argv[0] + ' [site] [query] '
+        return 'Usage: ' + sys.argv[0] + ' [site] [query] '
 
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     #pass
-    main_with_args()
+main_with_args()

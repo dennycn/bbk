@@ -64,6 +64,7 @@ $pid = pending($uid, $showOrder, $query);
 </table>
 
 <?php
+
 $result_one = get_search_result($query, $order_one);
 $result_two = get_search_result($query, $order_two);
 if ($result_one==NULL || $result_two==NULL) {
@@ -134,17 +135,26 @@ function simulate_data()
         $results[] = array("url" => $url, "title" => $title, "snippet" => $snippet,
                            "dispurl" => $dispurl);
     }
+    print_r($results);
     return $results;
 }
 
 // 最终的网页检索选择函数
 function search($query, $engine) {
+    //if ($engine == 'google')
+        $engine = 'sogou';
     //return simulate_data();
 
     // called python
     $program = '/usr/bin/python ./search/metasearch.py '.$engine.' '.$query;
-    print($program.'<br>');
-    return exec ($program);
+    print($program."\t");
+    $str = exec($program);
+    $json_str = json_decode($str, true)['data'];
+    //print($str.'<br>');
+    //var_dump($json_str);
+    printf("len=%d<br>", count($json_str));
+    //return $str;
+    return $json_str;
 
     if ($engine == "google") {
         return search_google($query);
@@ -153,7 +163,7 @@ function search($query, $engine) {
         return search_baidu($query);
     }
     else {
-        return NULL;
+        return array();
     }
 }
 
@@ -169,7 +179,10 @@ function get_search_result($query, $engine) {
 function display($result, $query)
 {
     // 不同频道有不同的显示模板，现分为news/finance/
-    $result_num=count($result);
+    $result_num = count ($result);
+    if ($result_num == 0)
+        return;
+
     if ($result["news"]!=NULL) {
         $result_num--;
     }
