@@ -14,7 +14,7 @@ require_once("page_template.php");
 <tr><td><?php show_search_form() ?> </td></tr>
 */
 ?>
-
+<br>
 <table class="tbl">
 <tr><td class='bluetitleFont'>搜索比比看<br></td></tr>
 <tr><td class="td_small">输入任意搜索关键字,然后对比两边结果,选择你最喜欢的结果投票</td></tr>

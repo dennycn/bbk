@@ -19,9 +19,10 @@ function simulate_data()
 
 // 最终的网页检索选择函数
 function search($query, $engine) {
-    //if ($engine == "google")
+    if ($engine == "google"){
+    }
         $engine = 'sogou';
-    return simulate_data();
+    //return simulate_data();
 
     // called python
     $program = 'python ./search/metasearch.py '.$engine.' '.$query;
