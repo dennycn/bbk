@@ -119,7 +119,7 @@ class BaiduSearchEngine(SearchEngine):
     '''
     def build_url(self):
         url = BAIDUURL_PREFIX
-        url += self.query
+        url += urlencode(self.query)
         url += BAIDUURL_POSTFIX
 #        param = {'cl':2, 'wd':self.query}
 #        url = BAIDUURL_SEARCH + urllib.urlencode(param)
@@ -130,7 +130,7 @@ class BaiduSearchEngine(SearchEngine):
             return []
 
         print("pagelen=%d" %len(page))
-        ress = []
+        results = []
         dpage = PyQuery(page)
         datalist = dpage('.result')
         for item in datalist.items():
@@ -140,15 +140,15 @@ class BaiduSearchEngine(SearchEngine):
             url = ddpage('div.f13 a.c-showurl').text()
             res = SearchResult(title, abstract, url)
             result_dict = {}
-            result_dict["url"] = url  #  #.encode('utf-8', 'ignore')
-            result_dict["title"] = title  #  #.encode('utf-8', 'ignore')
-            result_dict["snippet"] = abstract  #  #.encode('utf-8', 'ignore')
-            result_dict["dispurl"] = url  #  #.encode('utf-8', 'ignore')
-            ress.append(result_dict)
+            result_dict["url"] = url
+            result_dict["title"] = title  #.encode('utf-8', 'ignore')
+            result_dict["snippet"] = abstract  #.encode('utf-8', 'ignore')
+            result_dict["dispurl"] = dis_url
+            results.append(result_dict)
 
             print('77 %s %s %s' %(title, abstract, url))
-        print('len(ress)=%d' %len(ress))
-        return ress
+        print('len(results)=%d' %len(results))
+        return results
 
 class GoogleSearchEngine(SearchEngine):
     ''' GoogleSearchEngine
@@ -178,8 +178,7 @@ class SogouSearchEngine(SearchEngine):
             return []
 
         print("pagelen=%d" %len(page))
-        results = {}
-        res_list = []
+        results = []
         dpage = PyQuery(page)
         datalist = dpage('.results div.rb')
         for item in datalist.items():
@@ -194,12 +193,10 @@ class SogouSearchEngine(SearchEngine):
             result_dict["title"] = title  #.encode('utf-8', 'ignore')
             result_dict["snippet"] = abstract  #.encode('utf-8', 'ignore')
             result_dict["dispurl"] = dis_url
-            res_list.append(result_dict)
+            results.append(result_dict)
 
             #print('77 %s %s %s' %(title, abstract, url))
-        results['data'] = res_list
-        print('len(ress)=%d' %len(res_list))
-        #return results
+        print('len(results)=%d' %len(results))
         return json.dumps(results)
 
 

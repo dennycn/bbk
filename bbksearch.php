@@ -146,11 +146,11 @@ function search($query, $engine) {
     //return simulate_data();
 
     // called python
-    $program = '/usr/bin/python ./search/metasearch.py '.$engine.' '.$query;
+    $program = 'python ./search/metasearch.py '.$engine.' '.$query;
     print($program."\t");
     $str = exec($program);
-    $json_str = json_decode($str, true)['data'];
-    //print($str.'<br>');
+    $json_str = json_decode($str, true);
+    print($str);
     //var_dump($json_str);
     printf("len=%d<br>", count($json_str));
     //return $str;
