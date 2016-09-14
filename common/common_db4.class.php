@@ -31,23 +31,23 @@ class CommonDB{
 
 	function connectdb(){ //这个函数用于连接数据库
 
-	$this->link=mysql_connect($this->hostname,$this->username,$this->password) or die("Sorry,can not connect to database");
+	$this->link=mysql_connect($this->hostname, $this->username, $this->password) or die("Sorry,can not connect to database");
 	return $this->link;
 	}
 
 	function selectdb(){ //这个函数用于选择数据库
-	mysql_select_db($this->database,$this->link);
+	mysql_select_db($this->database, $this->link);
 	}
 
 
 	function escape_string($string)
 	{
 	//	print $string;
-        return mysql_real_escape_string($string,$this->link);
+        return mysql_real_escape_string($string, $this->link);
 	}
 
 	function query($sql){ //这个函数用于送出查询语句并返回结果，常用。
-		if($this->result=mysql_query($sql,$this->link)) return $this->result;
+		if($this->result=mysql_query($sql, $this->link)) return $this->result;
 		else {
 		echo "SQL_ERROR: ".mysql_error();
 		return false;
@@ -101,12 +101,12 @@ class CommonDB{
 	}
 	function deleteInternal($sql)
 	{
-		return $this->deleteDB($sql,$this->link);
+		return $this->deleteDB($sql, $this->link);
 	}
 
 	function deleteDB($sql,&$conn)
 	{
-		return $this->updateDB($sql,$this->link);
+		return $this->updateDB($sql, $this->link);
 	}
 
 	 function updateDB($sql)
@@ -126,7 +126,7 @@ class CommonDB{
 
 	function insertInternal($sql)
 	{
-		return $this->insertDB($sql,$this->link);
+		return $this->insertDB($sql, $this->link);
 	}
 
 	function insertDB($sql)
@@ -134,7 +134,7 @@ class CommonDB{
 		$id = NULL;
 		if(is_null($sql))return NULL;
 
-		$result = $this->query($sql,$this->link);
+		$result = $this->query($sql, $this->link);
 		if(!$result)
 		{
 			return NULL;

@@ -2,14 +2,20 @@
 /*
 @file: util.php
 @author: wuqifu@gmail.com
-@date: 2011-07-24
+@date: 2016/9/15
 @see:
 */
 
 require_once('common/common_db.class.php');
 require_once('common/download.php');
+require_once('common/common.php');
 
-
+/*
+@function: cached_download
+@desc: get unexpire url from db in table~pageCache, and download it
+@args: $url
+@return: string
+**/
 function cached_download($url)
 {   // table: pageCache~ delete/select/update
     $dbm = new CommonDB();  // delete old cache
@@ -61,21 +67,29 @@ function cached_download($url)
     return $newpage;
 }
 
+/*
+@function: is_server_busy
+@args:
+@return: boolean
+*/
 function is_server_busy() {
+    $ret = False;
     $dbm = new CommonDB();
     $busysql="SELECT * FROM pageCache where url='___SERVER_BUSY___' and expire>=now()";
     $result=$dbm->SELECTRows($busysql);
     $sum=count($result);
     if($sum>0)
     {
-        return TRUE;
+        $ret = TRUE;
     }
-    else
-    {
-        return FALSE;
-    }
+    return $ret;
 }
 
+/*
+@function: set_server_busy
+@args:
+@return:
+*/
 function set_server_busy() {
     $server_busy_timeout_mins = "2";
     $dbm = new CommonDB();
@@ -84,7 +98,13 @@ function set_server_busy() {
     $dbm->insertInternal($sql);
 }
 
-function pending($uid,$showOrder,$query) {
+/*
+@function: pending
+@args:
+@return:
+@see:
+*/
+function pending($uid, $showOrder, $query) {
     deleteOldPendings();
     $dbm = new CommonDB();
     //print $query;
@@ -94,6 +114,12 @@ function pending($uid,$showOrder,$query) {
     return $pid;
 }
 
+/*
+@function: cached_download
+@args:
+@return:
+@see:
+*/
 function deleteOldPendings()
 {
     $dbm = new CommonDB();
@@ -102,31 +128,16 @@ function deleteOldPendings()
     // delete old pendings
     $deletesql="delete FROM pending where deadline<now()";
 
-//  print $deletesql;
-
     $dbm->deleteInternal($deletesql);
     $dbm->commit();
 }
 
-function randStr($len=24) {
-    $chars='ABDEFGHJKLMNPQRSTVWXYabdefghijkmnpqrstvwxy23456789#%@'; // characters to build the password FROM
-    mt_srand((double)microtime()*1000000 + getmypid()); // seed the random number generater (must be done)
-    $num='';
-    while(strlen($num)<$len)
-        $num.=substr($chars,(mt_rand()%strlen($chars)),1);
-    return $num;
-}
-
-function randOrder($len=1) {
-    $chars='12';    // characters to build the password FROM
-    mt_srand((double)microtime()*1000 + getmypid());    // seed the random number generater (must be done)
-
-    $num='';
-    while(strlen($num)<$len)
-        $num.=substr($chars,(mt_rand()%strlen($chars)),1);
-    return $num;
-}
-
+/*
+@function: cached_download
+@args:
+@return:
+@see:
+*/
 function GetUid() {
     if(isset($_COOKIE["search_cookie"]))
     {
@@ -141,6 +152,12 @@ function GetUid() {
 }
 
 // get cookie FROM table: users
+/*
+@function: cached_download
+@args:
+@return:
+@see:
+*/
 function UserCookie($search_cookie)
 {
     //print $search_cookie;
@@ -167,7 +184,7 @@ function UserCookie($search_cookie)
         {
             $insertsql="insert into users(cookie,lasttime) values ('".$num."', now())";
             $uid=$dbm->insertInternal($insertsql);
-            SetCookie("search_cookie",$num,time()+$lifeTime);
+            SetCookie("search_cookie", $num,time()+$lifeTime);
             return $uid;
         }
     }
@@ -177,6 +194,12 @@ function UserCookie($search_cookie)
     }
 }
 
+/*
+@function: cached_download
+@args:
+@return:
+@see:
+*/
 function GetVote($pid, $choosenum, $uid)
 {   // get data FROM table: pending
     deleteOldPendings();
@@ -185,7 +208,6 @@ function GetVote($pid, $choosenum, $uid)
                   $dbm->escape_string($pid) .
                   " and uid=" . $dbm->escape_string($uid) .
                   " limit 1";
-
 // print $pendingsql;
 
     $result=$dbm->SELECTRows($pendingsql);
@@ -213,6 +235,12 @@ function GetVote($pid, $choosenum, $uid)
     return array("choose" => $choose, "query" => $query);
 }
 
+/*
+@function: cached_download
+@args:
+@return:
+@see:
+*/
 function GetVoteSum($uid)
 {
     $dbm = new CommonDB();
