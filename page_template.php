@@ -19,8 +19,8 @@ function simulate_data()
 
 // 最终的网页检索选择函数
 function search($query, $engine) {
-    //if ($engine == 'google')
-    $engine = 'sogou';
+    //if ($engine == "google")
+        $engine = 'sogou';
     return simulate_data();
 
     // called python
@@ -57,15 +57,15 @@ function get_search_result($query, $engine) {
 // show search box
 function show_search_form()
 {
-    echo <<<EOD
-    <form name="form1" method="get" action="bbksearch.php" onsubmit="return CheckForm();">
-                                           <table id="search_box" width="98%">
-                                                   <tr><td class="td_search_left" >
-                                                               <img src="images/search_icon.gif" class="img_search" />&nbsp;
-    <input id='query' type="text" name="query" class="searchbox"></td>
-                                           <td class="td_search_right"><input type="submit" value="比比看" class="sureButton"/></td>
-                                                           </tr></table></form>
-                                                           EOD;
+echo <<<EOD
+<form name="form1" method="get" action="bbksearch.php" onsubmit="return CheckForm();">
+<table id="search_box" width="98%">
+<tr><td class="td_search_left" >
+<img src="images/search_icon.gif" class="img_search" />&nbsp;
+<input id='query' type="text" name="query" class="searchbox"></td>
+<td class="td_search_right"><input type="submit" value="比比看" class="sureButton"/></td>
+</tr></table></form>
+EOD;
 }
 
 // choose stat: 排行榜/我的选择
