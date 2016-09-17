@@ -12,63 +12,7 @@ $(function(){  // 相当于在页面中的body标签加上onload事件
 		function () { $(this).addClass("hover") },
 		function () { $(this).removeClass("hover") }
 	);
-
-	$("#chk_all").click(function(){
-		$("input[name='chk_list']").attr("checked",$(this).attr("checked"));
-	});
-
-    //删除选中数据处理
-    $('#form_update').submit(function(){
-//        if (!confirm("是否保存数据, 删除后不可恢复"))  {
-//            return false;
-//        }
-        var gprice = '';
-		var gid = '';
-        $(':checkbox').each(function(){
-            if($(this).attr('checked')){
-                var tdarr = $(this).parents("td").siblings(); //<td>
-				price = tdarr.eq(0).find("input").val()
-				id = tdarr.eq(2).text()
-				gprice += price+','
-                gid += id+','
-            }
-        });
-		alert(gid)
-        gid = gid.substring(0,gid.length-1);
-        $('[name=gid]').val(gid);
-        gprice = gprice.substring(0,gprice.length-1);
-        $('[name=gprice]').val(gprice);
-        return true;
-    });
-
 	
-	$("#soldList tr td :text").focus(function () {
-		var oldtext = $(this).val();
-		var status=$(this).parent().next();
-		status.html("正在编辑")
-		$(this).blur(function () {   
-			//var status = $(this).parent().next();
-			var tbl_name = $("#table_name").val();
-			var newtext = $(this).val();  
-			var pid = status.next().html();
-			
-			if (oldtext != newtext)
-			{   // save to db
-				status.html("正在保存");
-				saveToDB(status, tbl_name, newtext, pid);
-			}else{
-				status.html("无");
-			}
-		});  
-	});  //end id_rows_to_pirce
-
-	$("#soldList tr td img.img_delete").click(function () {
-		var status=$(this).parent().next().next();
-		var tbl_name = $("#table_name").val();
-		var pid = status.next().html();
-		deleteToDB(status, tbl_name, pid);
-	});  //end id_rows_to_pirce
-
 }) 
 
 function saveToDB(obj, table, price, pid)

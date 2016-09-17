@@ -1,4 +1,11 @@
 <?php
+/*
+@file: vote.php
+@author:  wuqifu@gmail.com
+@date: 2016/9/15
+@see:
+*/
+
 require_once("bbk_sql.php");
 
 

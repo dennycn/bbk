@@ -1,19 +1,17 @@
 <?php
+/*
+@file: vote.php
+@author:  bytemind@gmail.com wuqifu@gmail.com
+@date: 2016/9/15
+@see:
+*/
+
 //header("Content-Type: text/html; charset=UTF-8");
 @require_once('header.php');
 require_once("page_template.php");
 
-/*
-<form name="form1" method="get" action="bbksearch.php" onsubmit="return CheckForm();">
-<table id="search_box" width="98%">
-<tr><td class="td_search_left" >
-<img src="images/search_icon.gif" class="img_search" />&nbsp;
-<input id='query' type="text" name="query" class="searchbox"></td>
-<td class="td_search_right"><input type="submit" value="比比看" class="sureButton"/></td>
-</tr></table></form>
-<tr><td><?php show_search_form() ?> </td></tr>
-*/
 ?>
+
 <br>
 <table class="tbl">
 <tr><td class='bluetitleFont'>搜索比比看<br></td></tr>

@@ -1,10 +1,9 @@
 <?php
-require_once ('Log.php');
 require_once ('config.php');
 
 /*
 @class: CommonDB
-called: mysql_connect
+@called: mysql_connect
 */
 class CommonDB{
 	var $username;

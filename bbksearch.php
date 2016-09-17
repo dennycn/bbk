@@ -1,7 +1,11 @@
 <?php
-// 实际的搜索实现文件
-//header("Content-Type: text/html; charset = UTF-8");
-//require_once("search/sogou.php");
+/*
+@file: bbksearch.php
+@desc: 实际的搜索实现文件
+@author:  bytemind@gmail.com wuqifu@gmail.com
+@date: 2007-6-13 2016/9/15
+*/
+
 require_once('header.php');
 require_once("page_template.php");
 require_once("common/common.php");

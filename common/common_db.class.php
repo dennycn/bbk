@@ -1,10 +1,9 @@
 <?php
-require_once ('Log.php');
 require_once ('config.php');
 
 /*
 @class: CommonDB
-called: mysqli
+@called: mysqli
 */
 class CommonDB{
 	private $conn = NULL;

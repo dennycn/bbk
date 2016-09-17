@@ -2,7 +2,7 @@
 
 require_once('../util.php');
 
-// 只获取网页结果：新闻/资讯
+// 鍙幏鍙栫綉椤电粨鏋滐細鏂伴椈/璧勮
 define("GOOGLEURL_PREFIX", "http://www.google.com.hk/#hl=zh-CN&source=hp&q=");
 define("GOOGLEURL_POSTFIX", "");
 define("BAIDUURL_PREFIX", "http://www.baidu.com/s?wd=");
@@ -37,7 +37,7 @@ class SearchEngine
     {
     }
 
-    // php解析页面暂只发现regex，jquery无法调用
+    // php瑙ｆ瀽椤甸潰鏆傚彧鍙戠幇regex锛宩query鏃犳硶璋冪敤
     function parse_page($page)
     {
     }

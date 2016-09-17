@@ -1,5 +1,10 @@
 <?php
-// bytemind@gmail.com
+/*
+@file: vote.php
+@author:  bytemind@gmail.com wuqifu@gmail.com
+@date: 2007-6-13 2016/9/15
+@see:
+*/
 
 require_once('common/common_db.class.php');
 require_once('header.php');

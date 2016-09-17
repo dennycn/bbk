@@ -101,7 +101,7 @@ function set_server_busy() {
 /*
 @function: pending
 @args:
-@return:
+@return: $pid
 @see:
 */
 function pending($uid, $showOrder, $query) {
@@ -115,7 +115,7 @@ function pending($uid, $showOrder, $query) {
 }
 
 /*
-@function: cached_download
+@function: deleteOldPendings
 @args:
 @return:
 @see:
@@ -133,7 +133,7 @@ function deleteOldPendings()
 }
 
 /*
-@function: cached_download
+@function: GetUid
 @args:
 @return:
 @see:
@@ -153,9 +153,9 @@ function GetUid() {
 
 // get cookie FROM table: users
 /*
-@function: cached_download
+@function: UserCookie
 @args:
-@return:
+@return: $uid or ""
 @see:
 */
 function UserCookie($search_cookie)
@@ -195,9 +195,9 @@ function UserCookie($search_cookie)
 }
 
 /*
-@function: cached_download
+@function: GetVote
 @args:
-@return:
+@return: array()
 @see:
 */
 function GetVote($pid, $choosenum, $uid)
@@ -236,9 +236,9 @@ function GetVote($pid, $choosenum, $uid)
 }
 
 /*
-@function: cached_download
+@function: GetVoteSum
 @args:
-@return:
+@return: array
 @see:
 */
 function GetVoteSum($uid)
